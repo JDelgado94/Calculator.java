@@ -1,0 +1,130 @@
+/*Name:Jorge Delgado
+ * Date: 9/21/22
+ * Program: Swing Calculator (Homework 5)*/
+
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.*;
+import java.awt.event.*;
+import javax.swing.event.*;
+
+
+public class Main {
+
+    //Main
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                constructGUI();
+            }
+        });
+
+    }
+
+    //ConstructGUI:
+    private static void constructGUI() {
+
+        JFrame.setDefaultLookAndFeelDecorated(true);
+        CalcFrame frame = new CalcFrame();
+        frame.setVisible(true);
+
+    }
+}
+
+//ActionListener:
+class MyButtonListener implements ActionListener {
+    CalcFrame fr;
+
+    public MyButtonListener(CalcFrame frame) {
+        fr = frame;
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        JButton btn = (JButton) e.getSource();
+        Double result = 0.0;
+
+        String firstNumber = fr.firstNumber.getText();
+        Double firstNum = Double.parseDouble(firstNumber);
+
+        String secondNumber = fr.secondNumber.getText();
+        Double secondNum = Double.parseDouble(secondNumber);
+
+        String choice = (String) fr.operator.getSelectedItem();
+        if (choice == "Add")
+        {
+            result = firstNum + secondNum;
+
+        }
+        else if (choice == "Subtract")
+        {
+            result = firstNum - secondNum;
+        }
+        else if (choice == "Multiply")
+        {
+            result = firstNum * secondNum;
+        }
+        else if (choice == "Divide")
+        {
+            result = firstNum / secondNum;
+        }
+        System.out.println(result);
+        fr.result.setText("Result: " + result.toString());
+    }
+}
+
+// Construct GUI Class:
+class CalcFrame extends JFrame {
+
+    public JTextField firstNumber;
+    public JTextField secondNumber;
+    public JComboBox operator;
+    public JLabel result;
+
+    public CalcFrame() {
+        super();
+        init();
+    }
+
+    private void init() {
+
+        firstNumber = new JTextField();
+        secondNumber = new JTextField();
+        result = new JLabel("Result: ");
+        String[] selections = { "Add", "Subtract", "Multiply", "Divide" };
+        operator = new JComboBox(selections);
+
+        JButton calculateBtn = new JButton("Calculate");
+        calculateBtn.addActionListener(new MyButtonListener(this));
+
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setTitle("Simple Calculator");
+        this.setLayout(new GridLayout(5, 2));
+
+        //First number:
+        this.add(new JLabel("First Number:"));
+        this.add(firstNumber);
+
+        //Second number:
+        this.add(new JLabel("Second Number:"));
+        this.add(secondNumber);
+
+        //Drop down box with operations:
+        this.add(new JLabel(""));
+        this.add(operator);
+
+        //Calculate button:
+        this.add(new JLabel(""));
+        this.add(calculateBtn);
+
+        //Result:
+        this.add(result);
+
+        int frameWidth = 300;
+        int frameHeight = 200;
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setBounds((int) (screenSize.getWidth() / 2) - frameWidth, (int) (screenSize.getHeight() / 2) - frameHeight,
+                frameWidth, frameHeight);
+
+    }
+
